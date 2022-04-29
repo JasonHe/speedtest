@@ -103,7 +103,7 @@ checkspeedtest() {
 speed_test(){
 	speedLog="./speedtest.log"
 	true > $speedLog
-		speedtest-cli/speedtest -p no -s $1 --accept-license > $speedLog 2>&1
+		./speedtest -p no -s $1 --accept-license > $speedLog 2>&1
 		is_upload=$(cat $speedLog | grep 'Upload')
 		if [[ ${is_upload} ]]; then
 	        local REDownload=$(cat $speedLog | awk -F ' ' '/Download/{print $3}')
