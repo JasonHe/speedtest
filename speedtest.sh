@@ -91,7 +91,7 @@ checkspeedtest() {
 		echo "正在安装 Speedtest-cli"
 		wget --no-check-certificate -qO speedtest.tgz https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-linux-$(uname -m).tgz
 	fi
-	mkdir -p speedtest-cli && tar zxvf speedtest.tgz -C ./speedtest-cli/ > /dev/null 2>&1 && chmod a+rx ./speedtest-cli/speedtest && mv ./speedtest-cli/speedtest ./ && rm -rf ./speedtest-cli
+	mkdir -p speedtest-cli && tar zxvf speedtest.tgz -C ./speedtest-cli/ > /dev/null 2>&1 && chmod a+rx ./speedtest-cli/speedtest && mv ./speedtest-cli/speedtest ./ && rm -rf ./speedtest-cli && rm ./speedtest.tgz
 }
 
 speed_test(){
