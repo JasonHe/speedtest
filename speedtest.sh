@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Colors
 RED='\033[0;31m'
@@ -31,36 +31,7 @@ checksystem() {
 	fi
 }
 
-checkpython() {
-	if  [ ! -e '/usr/bin/python' ]; then
-	        echo "正在安装 Python"
-	            if [ "${release}" == "centos" ]; then
-	            		yum update > /dev/null 2>&1
-	                    yum -y install python > /dev/null 2>&1
-	                    yum -y install python39 > /dev/null 2>&1
-	                    if  [ ! -e '/usr/bin/python' ]; then
-	                        ln -s /usr/bin/python3 /usr/bin/python
-	                    fi
-	                else
-	                	apt-get update > /dev/null 2>&1
-	                    apt-get -y install python > /dev/null 2>&1
-	                fi
-	        
-	fi
-}
-
-checkcurl() {
-	if  [ ! -e '/usr/bin/curl' ]; then
-	        echo "正在安装 Curl"
-	            if [ "${release}" == "centos" ]; then
-	                yum update > /dev/null 2>&1
-	                yum -y install curl > /dev/null 2>&1
-	            else
-	                apt-get update > /dev/null 2>&1
-	                apt-get -y install curl > /dev/null 2>&1
-	            fi
-	fi
-}
+ln -s /usr/bin/python3 /usr/bin/python
 
 checkwget() {
 	if  [ ! -e '/usr/bin/wget' ]; then
@@ -415,8 +386,6 @@ runtest() {
 runall() {
 	checkroot;
 	checksystem;
-#	checkpython;
-#	checkcurl;
 	checkwget;
 	checkspeedtest;
 	clear
