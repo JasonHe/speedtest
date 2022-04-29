@@ -416,7 +416,7 @@ runall() {
 	checkroot;
 	checksystem;
 #	checkpython;
-#	checkcurl;
+	checkcurl;
 	checkwget;
 	checkspeedtest;
 	clear
