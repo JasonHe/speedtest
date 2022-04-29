@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Colors
 RED='\033[0;31m'
@@ -31,7 +31,42 @@ checksystem() {
 	fi
 }
 
-ln -s /usr/bin/python3 /usr/bin/python
+checkpython() {
+	if  [ ! -e '/usr/bin/python' ]; then
+	        echo "正在安装 Python"
+	            if [ "${release}" == "centos" ]; then
+	            		if  [ -e '/usr/bin/python3' ]; then
+	                        ln -s /usr/bin/python3 /usr/bin/python
+	                    else
+	                    	yum update > /dev/null 2>&1
+	                    	yum -y install python3 > /dev/null 2>&1
+	                    	ln -s /usr/bin/python3 /usr/bin/python
+	                    fi
+	            else
+	                    if  [ -e '/usr/bin/python3' ]; then
+	                        ln -s /usr/bin/python3 /usr/bin/python
+	                    else
+	                    	apt-get update > /dev/null 2>&1
+	                    	apt-get -y install python3 > /dev/null 2>&1
+	                    	ln -s /usr/bin/python3 /usr/bin/python
+	                    fi
+	            fi
+	        
+	fi
+}
+
+checkcurl() {
+	if  [ ! -e '/usr/bin/curl' ]; then
+	        echo "正在安装 Curl"
+	            if [ "${release}" == "centos" ]; then
+	                yum update > /dev/null 2>&1
+	                yum -y install curl > /dev/null 2>&1
+	            else
+	                apt-get update > /dev/null 2>&1
+	                apt-get -y install curl > /dev/null 2>&1
+	            fi
+	fi
+}
 
 checkwget() {
 	if  [ ! -e '/usr/bin/wget' ]; then
@@ -62,13 +97,13 @@ checkspeedtest() {
 		echo "正在安装 Speedtest-cli"
 		wget --no-check-certificate -qO speedtest.tgz https://install.speedtest.net/app/cli/ookla-speedtest-1.1.1-linux-$(uname -m).tgz
 	fi
-	mkdir -p speedtest-cli && tar zxvf speedtest.tgz -C ./speedtest-cli/ > /dev/null 2>&1 && chmod a+rx ./speedtest-cli/speedtest && mv ./speedtest-cli/speedtest ./ && rm -rf ./speedtest-cli && rm ./speedtest.tgz
+	mkdir -p speedtest-cli && tar zxvf speedtest.tgz -C ./speedtest-cli/ > /dev/null 2>&1 && chmod a+rx ./speedtest-cli/speedtest && mv ./speedtest-cli/speedtest ./ && rm -rf ./speedtest-cli && rm -rf ./speedtest.tgz
 }
 
 speed_test(){
 	speedLog="./speedtest.log"
 	true > $speedLog
-		./speedtest -p no -s $1 --accept-license > $speedLog 2>&1
+		speedtest-cli/speedtest -p no -s $1 --accept-license > $speedLog 2>&1
 		is_upload=$(cat $speedLog | grep 'Upload')
 		if [[ ${is_upload} ]]; then
 	        local REDownload=$(cat $speedLog | awk -F ' ' '/Download/{print $3}')
@@ -386,6 +421,8 @@ runtest() {
 runall() {
 	checkroot;
 	checksystem;
+	checkpython;
+	checkcurl;
 	checkwget;
 	checkspeedtest;
 	clear
